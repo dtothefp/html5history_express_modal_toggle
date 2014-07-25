@@ -35,6 +35,7 @@ function closeModalHandler(e) {
   var $clickedElm = $(e.target);
   if ( $modalCont.find(e.target).length === 0 || $clickedElm.data('modal-btn') === 'close' ) {
     // move history back because this event is outside of the history navigation state
+    console.log('state data in close: ', History.getState().data);
     History.back();
   }
 }
@@ -107,9 +108,15 @@ function initiateModal() {
 
 initiateModal();
 
-window.addEventListener('popstate', function(e) {
+// History.Adapter.bind(window,'statechange',function(e) {
+//$(window).bind('popstate', function(e) {
+window.addEventListener('popstate', function(e){
+  console.log(e);
+  console.log(History.getState().data);
   if (sessionStorage.modalType === '' || sessionStorage.modalType === undefined) {
-    window.optly.mrkt.openModal(sessionStorage.lastType);
+    if (!!sessionStorage.lastType) {
+      window.optly.mrkt.openModal(sessionStorage.lastType);
+    }
   }
   else {
     window.optly.mrkt.closeModal(sessionStorage.modalType);
@@ -117,9 +124,7 @@ window.addEventListener('popstate', function(e) {
 });
 
 
-$(function() {
-  $('[data-modal-click]').on('click', openModalHandler);
-});
+$('[data-modal-click]').on('click', openModalHandler);
 
 // Test for vh CSS property 
 var testEl = $('#vh-test');
