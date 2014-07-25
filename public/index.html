@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="./bower_components/modernizr/modernizr.js"></script>
+    </head>
+    <body>
+        <ul class="signed-out-content utility-nav nav">
+          <li class="primary-button" data-modal-click="signup">
+            Sign Up
+          </li>
+          <li class="primary-button" data-modal-click="signin">
+            Log In
+          </li>
+        </ul><!--/.signed-in-content-->
+
+        <div id="signup-dialog" class="modal-dialog-container" data-opty-modal="signup">
+          <div class="dialog narrow">
+            <div class="modal-header">
+              <p class="normal-header header-h1">Create a free account</p>
+              <p>
+                <span class="dynamic-content">You&#x27;re seconds away from running A/B tests!</span>
+                <!-- <span class="optiverse-dynamic-content">By creating an account you can post in Optiverse and test drive Optimizely</span> -->
+              </p>
+            </div>
+            <form action="/account/create" method="POST" autocomplete="off">
+              <div class="modal-form-content">
+                <label id="name-label">
+                <span>Name</span>
+                <input type="text" name="name" />
+                </label>
+                <label>
+                <span>Work email address</span>
+                <input type="text" name="email" />
+                </label>
+                <label>
+                  <span>Password</span>
+                  <h5 class="password-req">Must use at least 8 characters and a mix of upper/lowercase letters, numbers or symbols</h5>
+                  <input type="password" name="password1" class="password1" />
+                </label>
+                <label>
+                <span>Confirm password</span>
+                <input type="password" name="password2" />
+                </label>
+                <label id="phone-label">
+                <span>Phone number</span>
+                <input type="text" name="phone_number" />
+                </label>
+                <div class="terms">
+                  <input type="checkbox" name="terms-of-service" />
+                  <p>
+                    I agree to the <a href="/dist/terms" target="_blank">Terms of Service</a> and <a href="/dist/privacy" target="_blank">Privacy Policy</a>.
+                  </p>
+                </div>
+                <!-- <input id="hidden" type="hidden" name="hidden" value="" /> -->
+                <div class="options">
+                  <p>Already have an Optimizely account? <a class="show-sign-in">Sign in here</a></p>
+                </div>
+              </div>
+              <!--/.modal-form-content-->
+              <div class="modal-footer">
+                <div class="buttons">
+                  <input type="submit" class="primary-button submit-btn translate" value="Create account &raquo;">
+                  <input type="button" data-modal-btn="close" class="secondary-button close-btn translate" value="Cancel">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- end .modal-dialog-container -->
+        <div id="sign-in-dialog" class="modal-dialog-container" data-opty-modal="signin">
+          <div class="dialog narrow">
+            <div class="modal-header">
+              <p class="normal-header header-h1">Sign in to Optimizely</p>
+            </div>
+            <form action="/account/signin" method="POST" autocomplete="off">
+              <div class="modal-form-content">
+                <label>
+                <span>Email address</span>
+                <input type="text" name="email" />
+                </label>
+                <label>
+                <span>Password</span>
+                <input type="password" name="password" />
+                </label>
+                <div class="terms">
+                  <label class="spaced">
+                    <input type="checkbox" name="persist" checked="checked" />
+                    <p>Keep me signed in</p>
+                  </label>
+                </div>
+                <div class="options">
+                  <p>
+                    <a class="show-forgot-password">Forgot your password?</a><br />
+                    No account? <a class="show-create-account">Register here</a>
+                  </p>
+                </div>
+              </div>
+              <!--/.modal-form-content-->
+              <div class="modal-footer">
+                <div class="buttons">
+                  <input type="submit" class="primary-button submit-btn translate" value="Sign in &raquo;">
+                  <input type="button" data-modal-btn="close" class="secondary-button close-btn translate" value="Cancel">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- end .modal-dialog-container -->
+
+        <script src="./bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="./bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>

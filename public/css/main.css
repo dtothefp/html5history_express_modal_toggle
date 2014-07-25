@@ -1,0 +1,159 @@
+.button {
+  background: linear-gradient(top, #147ec7 0%, #126fb0 100%);
+  color: #fff;
+  border: 1px solid #22599a;
+  border-radius: 1px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.87em;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center; }
+  .button.small {
+    font-size: 12px;
+    padding: 0.5em 1em; }
+
+.primary-button {
+  background: linear-gradient(to bottom, #90b71c 0%, #7fa119 100%);
+  border: 1px solid #7e9339;
+  border-radius: 1px;
+  color: #fff !important;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center;
+  vertical-align: middle;
+  text-shadow: 0 -1px 0px rgba(0, 0, 0, 0.23); }
+  .primary-button:hover {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.18);
+    background: #90b71c;
+    border-color: #68792f;
+    text-decoration: none; }
+
+.secondary-button {
+  background: linear-gradient(to bottom, #eeeeee 0%, #e1e1e1 100%);
+  border: 1px solid #cacaca;
+  border-radius: 1px;
+  color: #888 !important;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8); }
+  .secondary-button.small {
+    font-size: 12px;
+    padding: 0.5em 1em; }
+  .secondary-button:hover {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.18);
+    background: #eee;
+    border-color: #b8b8b8;
+    text-decoration: none; }
+
+.modal-dialog-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  cursor: pointer;
+  z-index: 100; }
+  .modal-dialog-container .dialog {
+    z-index: 200; }
+  .modal-dialog-container .dialog {
+    background: #fff;
+    box-shadow: 0 2px 10px #333;
+    text-align: left;
+    width: 100%;
+    height: 100vh;
+    cursor: auto; }
+  .modal-dialog-container .modal-header {
+    background: #f8f8f8;
+    padding: 20px 40px; }
+    .modal-dialog-container .modal-header p {
+      margin: 0; }
+    .modal-dialog-container .modal-header span {
+      font-weight: 400;
+      font-size: 0.8em; }
+    .modal-dialog-container .modal-header p.normal-header {
+      font-family: "Gotham A", "Gotham B", Helvetica, Arial, sans-serif;
+      color: #006eb6; }
+  .modal-dialog-container form {
+    background: transparent;
+    width: 100%;
+    color: #6b6b6b;
+    font-size: 0.8em; }
+    .modal-dialog-container form .modal-form-content {
+      padding: 20px 40px; }
+    .modal-dialog-container form h5 {
+      margin: 0;
+      font-size: 0.9em;
+      font-weight: 100;
+      color: #6b6b6b;
+      text-align: left; }
+    .modal-dialog-container form input {
+      width: 100%;
+      display: inline-block;
+      height: 38px; }
+    .modal-dialog-container form label {
+      display: block; }
+      .modal-dialog-container form label span {
+        margin: 6px 0 3px 0;
+        display: inline-block;
+        line-height: 1.4; }
+    .modal-dialog-container form a {
+      text-decoration: underline;
+      cursor: pointer; }
+    .modal-dialog-container form .terms {
+      margin: 15px 0;
+      font-weight: 400; }
+      .modal-dialog-container form .terms input {
+        margin-right: 3px;
+        width: auto;
+        height: auto; }
+      .modal-dialog-container form .terms input, .modal-dialog-container form .terms p {
+        display: inline; }
+    .modal-dialog-container form .options {
+      text-align: center; }
+      .modal-dialog-container form .options a {
+        text-decoration: none; }
+    .modal-dialog-container form .modal-footer {
+      padding: 20px 40px;
+      background: #f8f8f8;
+      border-top: 1px solid #eee; }
+      .modal-dialog-container form .modal-footer input {
+        font-size: 12px;
+        font-weight: 400;
+        padding: 0.5em 1.4em; }
+      .modal-dialog-container form .modal-footer input:first-child {
+        margin-bottom: 10px; }
+
+@media only screen and (min-width: 768px) {
+  .modal-dialog-container .dialog {
+    width: 600px;
+    height: auto;
+    margin: 100px auto 0 auto; }
+    .modal-dialog-container .dialog form .buttons {
+      width: 100%; }
+      .modal-dialog-container .dialog form .buttons:before, .modal-dialog-container .dialog form .buttons:after {
+        content: " ";
+        display: table; }
+      .modal-dialog-container .dialog form .buttons:after {
+        clear: both; }
+      .modal-dialog-container .dialog form .buttons input:first-child {
+        margin: 0;
+        width: 130px;
+        float: right; }
+      .modal-dialog-container .dialog form .buttons input:last-child {
+        margin-right: 10px;
+        width: 78px;
+        float: left; } }

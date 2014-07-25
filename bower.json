@@ -1,0 +1,21 @@
+{
+  "name": "myapp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dtothefp/grunt-photobox-express",
+  "authors": [
+    "dtothefp <dtothefp@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "modernizr": "~2.8.3",
+    "history.js": "~1.8.0"
+  }
+}

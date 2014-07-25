@@ -1,0 +1,216 @@
+@mixin z-index-list($properties, $start: 0, $increment: 1) {
+  @for $i from 1 through length($properties) {
+    .#{nth($properties, $i)} {
+      z-index: $start + ( index($properties, nth($properties, $i)) * $increment);
+    }
+  }
+}
+ 
+@mixin z-index-nested($parent, $children, $start: 1, $increment: 1){
+  z-index: $start;
+  @include z-index-list($children, $start, $increment)
+}
+
+$children: dialog;
+$gotham-large-type: "Gotham A","Gotham B",Helvetica,Arial,sans-serif;
+$tablet-min-width: 768px;
+
+.button {
+  background: linear-gradient(top, #147ec7 0%,#126fb0 100%);
+  color: #fff;
+  border: 1px solid #22599a;
+  border-radius: 1px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: .87em;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center;
+
+  &.small {
+    font-size: 12px;
+    padding: 0.5em 1em;
+  }
+}
+
+.primary-button {
+  background: linear-gradient(to bottom, #90b71c 0%, #7fa119 100%);
+  border: 1px solid #7e9339;
+  border-radius: 1px;
+  color: #fff!important;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center;
+  vertical-align: middle;
+  text-shadow: 0 -1px 0px rgba(0,0,0,0.23);
+
+  &:hover {
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.18);
+    background: #90b71c;
+    border-color: #68792f;
+    text-decoration: none;
+  }
+}
+
+.secondary-button {
+  background: linear-gradient(to bottom, #eeeeee 0%, #e1e1e1 100%);
+  border: 1px solid #cacaca;
+  border-radius: 1px;
+  color: #888 !important;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0.6em 2.8em;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  text-shadow: 0 -1px 0 rgba(255,255,255,0.8);
+
+  &.small {
+    font-size: 12px;
+    padding: 0.5em 1em;
+  }
+
+  &:hover {
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.18);
+    background: #eee;
+    border-color: #b8b8b8;
+    text-decoration: none;
+  }
+}
+
+.modal-dialog-container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+  cursor: pointer;
+  @include z-index-nested(modal-dialog-container, $children, 100, 100);
+  .dialog {
+    background: #fff;
+    box-shadow: 0 2px 10px #333;
+    text-align: left;
+    width: 100%;
+    height: 100vh;
+    cursor: auto;
+  }
+  .modal-header {
+    background: #f8f8f8;
+    padding: 20px 40px;
+    p {margin: 0;}
+    span {
+      font-weight: 400;
+      font-size: 0.8em;
+    }
+    p.normal-header {
+      font-family: $gotham-large-type;
+      color: #006eb6;
+    }
+  }
+  form {
+    background: transparent;
+    width: 100%;
+    color: #6b6b6b;
+    font-size: 0.8em;
+    .modal-form-content {
+      padding: 20px 40px;
+    }
+    h5 {
+      margin: 0;
+      font-size: 0.9em;
+      font-weight: 100;
+      color: #6b6b6b;
+      text-align: left;
+    }
+    input {
+      width: 100%;
+      display: inline-block;
+      height: 38px;
+    }
+    label {
+      display: block;
+      span {
+        margin: 6px 0 3px 0;
+        display: inline-block;
+        line-height: 1.4;
+      }
+    }
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .terms {
+      margin: 15px 0;
+      font-weight: 400;
+      input {
+        margin-right: 3px;
+        width: auto;
+        height: auto;
+      }
+      input,
+      p {
+        display: inline;
+      }
+    }
+    .options {
+      text-align: center;
+      a {
+        text-decoration: none;
+      }
+    }
+    .modal-footer {
+      padding: 20px 40px;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+      input {
+        font-size: 12px;
+        font-weight: 400;
+        padding: 0.5em 1.4em
+      }
+      input:first-child {
+        margin-bottom: 10px; 
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $tablet-min-width) {
+  .modal-dialog-container {
+    .dialog {
+      width: 600px;
+      height: auto;
+      margin: 100px auto 0 auto;
+      form {
+        .buttons {
+          width: 100%;
+          &:before, &:after {
+              content: " ";
+              display: table;
+            }
+            &:after {
+              clear:both;
+            }
+            input:first-child {
+              margin: 0;
+              width: 130px;
+              float: right;
+            }
+            input:last-child {
+              margin-right: 10px;
+              width: 78px;
+              float: left;
+            }
+        }
+      }
+    }
+  }
+}
