@@ -1,144 +1,146 @@
+(function($) {
+  'use strict';
+  window.optly = window.optly || {};
+  window.optly.mrkt = window.optly.mrkt || {};
+  var baseUrl = document.URL;
+  var History = window.History || {};
 
-window.optly = window.optly || {};
-window.optly.mrkt = window.optly.mrkt || {};
-var baseUrl = document.URL;
-var History = window.History || {};
+  var $elms = {
+    signup: $('[data-opty-modal="signup"]'),
+    signin: $('[data-opty-modal="signin"]')
+  };
 
-var $elms = {
-  signup: $('[data-opty-modal="signup"]'),
-  signin: $('[data-opty-modal="signin"]')
-};
-
-function setHistoryId(stateData) {
-  if(stateData._id) {
-    stateData._id += 1;
-  }
-  else if (sessionStorage._id) {
-    stateData._id = Number(sessionStorage._id) + 1;
-  }
-  else {
-    stateData._id = 1;
-  }
-}
-
-function openModalHandler() {
-  var modalType = $(this).data('modal-click');
-  var stateData = History.getState().data;
-  stateData.modalType = modalType;
-  setHistoryId(stateData);
-  History.pushState(stateData, 'modal open', baseUrl);
-  window.optly.mrkt.openModal( modalType );
-}
-
-function closeModalHandler(e) {
-  var $modalCont = $(this);
-  var $clickedElm = $(e.target);
-  if ( $modalCont.find(e.target).length === 0 || $clickedElm.data('modal-btn') === 'close' ) {
-    // move history back because this event is outside of the history navigation state
-    console.log('state data in close: ', History.getState().data);
-    History.back();
-  }
-}
-
-function storeModalState(modalType, modalOpen) {
-  // set the modal type and last type for an open event
-  if (modalOpen) {
-    sessionStorage.modalType = modalType;
-    sessionStorage.lastType = '';
-  } 
-  // set the modal type and last type for an close event
-  else {
-    sessionStorage.modalType = '';
-    sessionStorage.lastType = modalType;
+  function setHistoryId(stateData) {
+    if (stateData._id) {
+      stateData._id += 1;
+    } else if (sessionStorage._id) {
+      stateData._id = Number(sessionStorage._id) + 1;
+    } else {
+      stateData._id = 1;
+    }
   }
 
-  // increment the session modal state ID if it has currently been set
-  if (sessionStorage._id) {
-    sessionStorage._id = Number(sessionStorage._id) + 1;
-  } 
-  // create the session modal state ID if it doesn't exist
-  else {
-    sessionStorage._id = 1;
-  }
-}
-
-window.optly.mrkt.openModal = function(modalType) {
-  var $elm = $elms[ modalType ];
-
-  // Update the modal state in the session storage
-  storeModalState(modalType, true);
-
-  // Fade out the modal and attach the close modal handler
-  $elm.fadeToggle(function() {
-    $elm.bind('click', closeModalHandler);
-  });
-};
-
-window.optly.mrkt.closeModal = function(modalType) {
-  var $elm = $elms[ modalType ];
-  // Update the modal state in the session storage
-  storeModalState(modalType, false);
-  // Fade out the modal and remove the close modal handler
-  $elm.fadeToggle(function() {
-    $elm.unbind('click', closeModalHandler);
-  });
-};
-
-
-function initiateModal() {
-  //Trigger Dialog if # is present in URL
-  if (History.getHash() === 'signup' || History.getHash() === 'signin') {
-    // var stateData = {};
-    // var historyState = History.getState().data;
-    // stateData.modalType = History.getHash();
-    // setHistoryId(stateData);
-    // baseUrl = baseUrl.split('#')[0];
-    // if (Object.keys(historyState).length === 0) {
-    //   History.pushState(stateData, 'modal open', baseUrl);
-    // } else {
-    //   History.replaceState(stateData, 'modal open', baseUrl);
-    // }
-    // window.optly.mrkt.openModal(stateData.modalType);
-  } 
-  else if (sessionStorage.modalType === 'signup' || sessionStorage.modalType === 'signin') {
-    modalType = sessionStorage.modalType;
+  function openModalHandler() {
+    var modalType = $(this).data('modal-click');
+    var stateData = History.getState().data;
+    stateData.modalType = modalType;
+    setHistoryId(stateData);
+    History.pushState(stateData, 'modal open', baseUrl);
     window.optly.mrkt.openModal(modalType);
   }
-}
 
-initiateModal();
-
-// History.Adapter.bind(window,'statechange',function(e) {
-//$(window).bind('popstate', function(e) {
-window.addEventListener('popstate', function(e){
-  console.log(e);
-  console.log(History.getState().data);
-  if (sessionStorage.modalType === '' || sessionStorage.modalType === undefined) {
-    if (!!sessionStorage.lastType) {
-      window.optly.mrkt.openModal(sessionStorage.lastType);
+  function closeModalHandler(e) {
+    var $modalCont = $(this);
+    var $clickedElm = $(e.target);
+    if ($modalCont.find(e.target).length === 0 || $clickedElm.data('modal-btn') === 'close') {
+      // move history back because this event is outside of the history navigation state
+      //console.log('state data in close: ', History.getState().data);
+      History.back();
     }
   }
-  else {
-    window.optly.mrkt.closeModal(sessionStorage.modalType);
-  }
-});
 
+  function storeModalState(modalType, modalOpen) {
+    // set the modal type and last type for an open event
+    if (modalOpen) {
+      sessionStorage.modalType = modalType;
+      sessionStorage.lastType = '';
+    }
+    // set the modal type and last type for an close event
+    else {
+      sessionStorage.modalType = '';
+      sessionStorage.lastType = modalType;
+    }
 
-$('[data-modal-click]').on('click', openModalHandler);
-
-// Test for vh CSS property 
-var testEl = $('#vh-test');
-testEl.css({height: '100vh'});
-var vhSupported = testEl.height() === window.innerHeight;
-
-function setModalHeight() {
-  if (window.innerWidth <= 720) {
-    if (!vhSupported) {
-      $elms.each(function(key, value) {
-        value.css({height: window.innerHeight});
-      });
+    // increment the session modal state ID if it has currently been set
+    if (sessionStorage._id) {
+      sessionStorage._id = Number(sessionStorage._id) + 1;
+    }
+    // create the session modal state ID if it doesn't exist
+    else {
+      sessionStorage._id = 1;
     }
   }
-}
 
-$(window).bind('load resize', setModalHeight);
+  window.optly.mrkt.openModal = function(modalType) {
+    var $elm = $elms[modalType];
+
+    // Update the modal state in the session storage
+    storeModalState(modalType, true);
+
+    // Fade out the modal and attach the close modal handler
+    $elm.fadeToggle(function() {
+      $elm.bind('click', closeModalHandler);
+    });
+  };
+
+  window.optly.mrkt.closeModal = function(modalType) {
+    var $elm = $elms[modalType];
+    // Update the modal state in the session storage
+    storeModalState(modalType, false);
+    // Fade out the modal and remove the close modal handler
+    $elm.fadeToggle(function() {
+      $elm.unbind('click', closeModalHandler);
+    });
+  };
+
+
+  function initiateModal() {
+    //Trigger Dialog if # is present in URL
+    if (History.getHash() === 'signup' || History.getHash() === 'signin') {
+      // var stateData = {};
+      // var historyState = History.getState().data;
+      // stateData.modalType = History.getHash();
+      // setHistoryId(stateData);
+      // baseUrl = baseUrl.split('#')[0];
+      // if (Object.keys(historyState).length === 0) {
+      //   History.pushState(stateData, 'modal open', baseUrl);
+      // } else {
+      //   History.replaceState(stateData, 'modal open', baseUrl);
+      // }
+      // window.optly.mrkt.openModal(stateData.modalType);
+    } else if (sessionStorage.modalType === 'signup' || sessionStorage.modalType === 'signin') {
+      var modalType = sessionStorage.modalType;
+      window.optly.mrkt.openModal(modalType);
+    }
+  }
+
+  initiateModal();
+
+  var initialTime = Date.now();
+
+  window.addEventListener('popstate', function(e) {
+    // Safari fires an initial popstate, we want to ignore this
+    if ((e.timeStamp - initialTime) > 20) {
+      if (sessionStorage.modalType === '' || sessionStorage.modalType === undefined) {
+        if (!!sessionStorage.lastType) {
+          window.optly.mrkt.openModal(sessionStorage.lastType);
+        }
+      } else {
+        window.optly.mrkt.closeModal(sessionStorage.modalType);
+      }
+    }
+  });
+
+  $('[data-modal-click]').on('click', openModalHandler);
+
+  // Test for vh CSS property 
+  var testEl = $('#vh-test');
+  testEl.css({
+    height: '100vh'
+  });
+  var vhSupported = testEl.height() === window.innerHeight;
+
+  function setModalHeight() {
+    if (window.innerWidth <= 720) {
+      if (!vhSupported) {
+        $elms.each(function(key, value) {
+          value.css({
+            height: window.innerHeight
+          });
+        });
+      }
+    }
+  }
+
+  $(window).bind('load resize', setModalHeight);
+}(window.jQuery));
