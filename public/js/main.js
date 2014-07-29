@@ -1,14 +1,24 @@
 (function($) {
   'use strict';
-  window.optly = window.optly || {};
+ window.optly = window.optly || {};
   window.optly.mrkt = window.optly.mrkt || {};
-  var baseUrl = document.URL;
-  var History = window.History || {};
+  var baseUrl = document.URL,
+    History = window.History || {},
+    Modernizr = window.Modernizr || {},
+    $elms = {
+      signup: $('[data-opty-modal="signup"]'),
+      signin: $('[data-opty-modal="signin"]')
+    },
+    initialTime = Date.now(),
+    lastPop,
+    testEl = $('#vh-test'),
+    vhSupported,
+    isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor),
+    isIosSafari = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(navigator.userAgent) || /(iPhone|iPod|iPad).*AppleWebKit/i.test(navigator.userAgent),
+    isIosChrome = !!navigator.userAgent.match('CriOS'),
+    isHistorySupported = Modernizr.history && !!window.sessionStorage && ( !(isIosSafari || isSafari) ) || isIosChrome;
 
-  var $elms = {
-    signup: $('[data-opty-modal="signup"]'),
-    signin: $('[data-opty-modal="signin"]')
-  };
+  // FUNCTIONS
 
   function setHistoryId(stateData) {
     if (stateData._id) {
@@ -22,10 +32,16 @@
 
   function openModalHandler() {
     var modalType = $(this).data('modal-click');
-    var stateData = History.getState().data;
-    stateData.modalType = modalType;
-    setHistoryId(stateData);
-    History.pushState(stateData, 'modal open', baseUrl);
+    console.log(baseUrl);
+    // Check for History/SessionStorage support
+    if (isHistorySupported) {
+      var stateData = History.getState().data;
+      stateData.modalType = modalType;
+      setHistoryId(stateData);
+      History.pushState(stateData, 'modal open', baseUrl);
+    } //else {
+      //window.location.hash = modalType;
+    //}
     window.optly.mrkt.openModal(modalType);
   }
 
@@ -35,10 +51,16 @@
     if ($modalCont.find(e.target).length === 0 || $clickedElm.data('modal-btn') === 'close') {
       // move history back because this event is outside of the history navigation state
       //console.log('state data in close: ', History.getState().data);
-      History.back();
+      if (isHistorySupported) {
+        History.back();
+      } else {
+        //window.location.hash = '';
+        window.optly.mrkt.closeModal($modalCont.data('opty-modal'));
+      }
     }
   }
 
+  // Only use this function if History/Session Storage is supported
   function storeModalState(modalType, modalOpen) {
     // set the modal type and last type for an open event
     if (modalOpen) {
@@ -64,8 +86,10 @@
   window.optly.mrkt.openModal = function(modalType) {
     var $elm = $elms[modalType];
 
-    // Update the modal state in the session storage
-    storeModalState(modalType, true);
+    if (isHistorySupported) {
+      // Update the modal state in the session storage
+      storeModalState(modalType, true);
+    }
 
     // Fade out the modal and attach the close modal handler
     $elm.fadeToggle(function() {
@@ -75,42 +99,37 @@
 
   window.optly.mrkt.closeModal = function(modalType) {
     var $elm = $elms[modalType];
-    // Update the modal state in the session storage
-    storeModalState(modalType, false);
+
+    if (isHistorySupported) {
+      // Update the modal state in the session storage
+      storeModalState(modalType, false);
+    }
+    
     // Fade out the modal and remove the close modal handler
     $elm.fadeToggle(function() {
       $elm.unbind('click', closeModalHandler);
     });
   };
 
-
+  // Only use if History/Session Storage in Enabled
   function initiateModal() {
+    var modalType;
     //Trigger Dialog if # is present in URL
-    if (History.getHash() === 'signup' || History.getHash() === 'signin') {
-      // var stateData = {};
-      // var historyState = History.getState().data;
-      // stateData.modalType = History.getHash();
-      // setHistoryId(stateData);
-      // baseUrl = baseUrl.split('#')[0];
-      // if (Object.keys(historyState).length === 0) {
-      //   History.pushState(stateData, 'modal open', baseUrl);
-      // } else {
-      //   History.replaceState(stateData, 'modal open', baseUrl);
-      // }
-      // window.optly.mrkt.openModal(stateData.modalType);
-    } else if (sessionStorage.modalType === 'signup' || sessionStorage.modalType === 'signin') {
-      var modalType = sessionStorage.modalType;
+    if (sessionStorage.modalType === 'signup' || sessionStorage.modalType === 'signin') {
+      modalType = sessionStorage.modalType;
+    } 
+    else if (History.getHash() === 'signup' || History.getHash() === 'signin') {
+      modalType = History.getHash();
+    }
+
+    if (modalType !== undefined) {
       window.optly.mrkt.openModal(modalType);
     }
   }
 
-  initiateModal();
-
-  var initialTime = Date.now();
-
-  window.addEventListener('popstate', function(e) {
+  function handlePopstate(e) {
     // Safari fires an initial popstate, we want to ignore this
-    if ((e.timeStamp - initialTime) > 20) {
+    if ( (e.timeStamp - initialTime) > 20 ) {
       if (sessionStorage.modalType === '' || sessionStorage.modalType === undefined) {
         if (!!sessionStorage.lastType) {
           window.optly.mrkt.openModal(sessionStorage.lastType);
@@ -119,21 +138,14 @@
         window.optly.mrkt.closeModal(sessionStorage.modalType);
       }
     }
-  });
-
-  $('[data-modal-click]').on('click', openModalHandler);
-
-  // Test for vh CSS property 
-  var testEl = $('#vh-test');
-  testEl.css({
-    height: '100vh'
-  });
-  var vhSupported = testEl.height() === window.innerHeight;
+    lastPop = e.timeStamp;
+  }
 
   function setModalHeight() {
     if (window.innerWidth <= 720) {
       if (!vhSupported) {
-        $elms.each(function(key, value) {
+        $.each($elms, function(key, value) {
+          console.log('resize');
           value.css({
             height: window.innerHeight
           });
@@ -142,5 +154,26 @@
     }
   }
 
+  //INITIALIZATION
+
+  if (isHistorySupported) {
+    // Check if modal state exists from previous page view 
+    initiateModal();
+    // Bind to popstate
+    window.setTimeout(function(){
+      this.addEventListener('popstate', handlePopstate);
+    }, 0);
+  }
+
+  // Bind modal open to nav click events
+  $('ul.utility-nav').delegate('[data-modal-click]', 'click', openModalHandler);
+
+  // Test for vh CSS property to make modal full height at mobile screen size
+  testEl.css({
+    height: '100vh'
+  });
+  vhSupported = testEl.height() === window.innerHeight;
+  // Set the modal height
   $(window).bind('load resize', setModalHeight);
+
 }(window.jQuery));

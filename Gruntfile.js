@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
   // Project configuration.
-  grunt.initConfig( {
+  grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
     express: {
@@ -12,9 +12,9 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     sass: {
-      dist: {                           
+      dist: {
         files: {
           './public/css/main.css': './public/css/*.scss'
         }
@@ -28,12 +28,12 @@ module.exports = function(grunt) {
       }
     }
 
-  } );
+  });
 
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
-  grunt.registerTask( 'default', [ 'sass', 'express:dev', 'watch' ] );
+  grunt.registerTask('default', ['sass', 'express:dev', 'watch']);
 };
